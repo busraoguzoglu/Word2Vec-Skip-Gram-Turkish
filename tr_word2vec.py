@@ -32,11 +32,11 @@ def main():
 
     # Train Model
     t = time()
-    model.train(sentences, total_examples=model.corpus_count, epochs=15, report_delay=1)
+    model.train(sentences, total_examples=model.corpus_count, epochs=30, report_delay=1)
     print('Time to train the model: {} mins'.format(round((time() - t) / 60, 2)))
 
     # Save Trained Model
-    model.save("word2vec_size200_window5.model")
+    model.save("word2vec_size200_window5_30epoch.model")
 
 if __name__ == '__main__':
     main()
