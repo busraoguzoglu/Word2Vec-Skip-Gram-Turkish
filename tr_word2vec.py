@@ -1,68 +1,42 @@
 from gensim.models import Word2Vec
-from sklearn.manifold import TSNE
-import matplotlib.pyplot as plt
-import pandas as pd
+from time import time
+import multiprocessing
 
-def tsne(model):
-
-    # t-SNE Visualization:
-
-    vocab = list(model.wv.key_to_index)
-    X = model.wv[vocab]
-    tsne = TSNE(n_components=2)
-    X_tsne = tsne.fit_transform(X)
-    df = pd.DataFrame(X_tsne, index=vocab, columns=['x', 'y'])
-    fig = plt.figure()
-    ax = fig.add_subplot(1, 1, 1)
-    ax.scatter(df['x'], df['y'])
-    for word, pos in df.iterrows():
-        ax.annotate(word, pos)
-
-def analogy(model, worda, wordb, wordc):
-    result = model.most_similar(negative=[worda],
-                                positive=[wordb, wordc])
-
-    return result[0][0]
+# https://www.kaggle.com/pierremegret/gensim-word2vec-tutorial
 
 def main():
 
     # Read the corpus:
-
     sentences = []
-    fp = open('MT TR Corpus/Turkish Corpus.tr', 'r', encoding='utf-8')
+    fp = open('data/Turkish Corpus.tr', 'r', encoding='utf-8')
     line = fp.readline()
     sentences.append(line)
     while line:
         line = fp.readline()
         sentences.append(line)
 
+    cores = multiprocessing.cpu_count()  # Count the number of cores in a computer
+
     # Input to Gensim Word2Vec implementation should be an iterable of sentences,
     # each consist of tokens seperated. Format should be 'utf-8'
-
     sentences = [s.split() for s in sentences]
-    print(len(sentences))
+    print("Sentence splitting is finished, length is:", len(sentences))
 
-    model = Word2Vec(sentences=sentences, vector_size=100, window=5, min_count=1, workers=5)
-    model.save("model/size100window5.model")
+    # Define Word2Vec Model
+    model = Word2Vec(window=3, size=100, min_count=1, workers=cores-1)
 
-    # Test:
+    # Build Vocab
+    t = time()
+    model.build_vocab(sentences, progress_per=10000)
+    print('Time to build vocab: {} mins'.format(round((time() - t) / 60, 2)))
 
-    model = Word2Vec.load("model/size100window5.model")
-    word_vectors = model.wv
+    # Train Model
+    t = time()
+    model.train(sentences, total_examples=model.corpus_count, epochs=15, report_delay=1)
+    print('Time to train the model: {} mins'.format(round((time() - t) / 60, 2)))
 
-    print('numpy vector:', model.wv['çok'])  # get numpy vector of a word
-    print('similars:', model.wv.most_similar('git', topn=5))
-
-    # Evaluate Analogies
-
-    test1 = analogy(word_vectors, 'erkek', 'baba', 'kadın')
-    print(test1)
-    test1 = analogy(word_vectors, 'sen', 'siz', 'ben')
-    print(test1)
-    test1 = analogy(word_vectors, 'bir', 'birinci', 'üç')
-    print(test1)
-
-    # Evaluate Similarity
+    # Save Trained Model
+    model.save("word2vec.model")
 
 if __name__ == '__main__':
     main()
