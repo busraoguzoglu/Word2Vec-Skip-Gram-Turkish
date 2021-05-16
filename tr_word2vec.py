@@ -23,7 +23,7 @@ def main():
     print("Sentence splitting is finished, length is:", len(sentences))
 
     # Define Word2Vec Model
-    model = Word2Vec(window=3, size=100, min_count=1, workers=cores-1)
+    model = Word2Vec(window=5, size=200, min_count=1, workers=cores-1)
 
     # Build Vocab
     t = time()
@@ -36,7 +36,7 @@ def main():
     print('Time to train the model: {} mins'.format(round((time() - t) / 60, 2)))
 
     # Save Trained Model
-    model.save("word2vec.model")
+    model.save("word2vec_size200_window5.model")
 
 if __name__ == '__main__':
     main()
