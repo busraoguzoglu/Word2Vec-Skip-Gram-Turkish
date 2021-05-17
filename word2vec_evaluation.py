@@ -24,8 +24,6 @@ def evaluate_analogy(model):
         analogy_entries.append(line)
 
     found_count = 0
-    not_found_count = 0
-    total_count = 0
 
     for index in range (len(analogy_entries)-1):
         entry = analogy_entries[index]
@@ -38,17 +36,16 @@ def evaluate_analogy(model):
         # Check if word1, word2, word3 and word4 is in vocab
         if word1 in model.wv.vocab and word2 in model.wv.vocab and word3 in model.wv.vocab and word4 in model.wv.vocab:
             results = analogy(model, word1, word4, word2)
-            total_count += 1
+
+            # Comparison with Results:
+            exists = False
+            for i in range(10):
+                if results[i][0] == word3:
+                    exists = True
 
             # Point +1 if the target word is one of the 10 guessed words:
-            if results[0][0] == word3 or results[1][0] == word3 or results[2][0] == word3\
-                    or results[3][0] == word3 or results[4][0] == word3\
-                    or results[5][0] == word3 or results[6][0] == word3\
-                    or results[7][0] == word3 or results[8][0] == word3\
-                    or results[9][0] == word3:
+            if exists:
                 found_count+=1
-            else:
-                not_found_count +=1
 
     return found_count
 
@@ -88,31 +85,37 @@ def main():
     print('Hello this script is for evalution')
 
     # Test:
-    model1 = Word2Vec.load("word2vec_size100_window3.model")
-    model2 = Word2Vec.load("word2vec_size200_window3.model")
-    model3 = Word2Vec.load("word2vec_size100_window5.model")
-    model4 = Word2Vec.load("word2vec_size200_window5.model")
+    model1 = Word2Vec.load("models/model1.model") # Vector:50 Window:3
+    model2 = Word2Vec.load("models/model2.model") # Vector:100 Window:3
+    model3 = Word2Vec.load("models/model3.model") # Vector:150 Window:3
+    model4 = Word2Vec.load("models/model4.model") # Vector:50 Window:5
+    model5 = Word2Vec.load("models/model5.model") # Vector:100 Window:5
+    model6 = Word2Vec.load("models/model6.model") # Vector:150 Window:5
 
     # Most Similar:
-    print('\n', model4.wv.most_similar(positive=["ben"]))
+    print('\n', model1.wv.most_similar(positive=["ben"]))
 
     # Evaluate Analogies
-    print('\n', model4.wv.most_similar(positive=["kadın", "baba"], negative=["anne"], topn=3))
-    print('\n', model4.wv.most_similar(positive=["üçüncü", "iki"], negative=["üç"], topn=3))
-    print('\n', model4.wv.most_similar(positive=["siz", "ben"], negative=["sen"], topn=3))
+    print('\n', model1.wv.most_similar(positive=["kadın", "baba"], negative=["anne"], topn=3))
+    print('\n', model1.wv.most_similar(positive=["üçüncü", "iki"], negative=["üç"], topn=3))
+    print('\n', model1.wv.most_similar(positive=["siz", "ben"], negative=["sen"], topn=3))
 
     print('Total correctly found analogies for model1: ', evaluate_analogy(model1))
     print('Total correctly found analogies for model2: ', evaluate_analogy(model2))
     print('Total correctly found analogies for model3: ', evaluate_analogy(model3))
     print('Total correctly found analogies for model4: ', evaluate_analogy(model4))
+    print('Total correctly found analogies for model5: ', evaluate_analogy(model5))
+    print('Total correctly found analogies for model6: ', evaluate_analogy(model6))
 
     # Evaluate Similarity
-    print('\n', model4.wv.similarity("kız", "kadın"))
+    print('\n', model1.wv.similarity("kız", "kadın"))
 
     print('\nTotal difference for model1: ', evaluate_similarity(model1))
     print('Total difference for model2: ', evaluate_similarity(model2))
     print('Total difference for model3: ', evaluate_similarity(model3))
     print('Total difference for model4: ', evaluate_similarity(model4))
+    print('Total difference for model5: ', evaluate_similarity(model5))
+    print('Total difference for model6: ', evaluate_similarity(model6))
 
     # Plotting:
 

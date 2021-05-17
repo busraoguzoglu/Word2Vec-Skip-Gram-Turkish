@@ -2,7 +2,7 @@ from gensim.models import Word2Vec
 from time import time
 import multiprocessing
 
-# https://www.kaggle.com/pierremegret/gensim-word2vec-tutorial
+#Ref: https://www.kaggle.com/pierremegret/gensim-word2vec-tutorial
 
 def main():
 
@@ -15,7 +15,7 @@ def main():
         line = fp.readline()
         sentences.append(line)
 
-    cores = multiprocessing.cpu_count()  # Count the number of cores in a computer
+    cores = multiprocessing.cpu_count()  # Count the number of cores in the computer
 
     # Input to Gensim Word2Vec implementation should be an iterable of sentences,
     # each consist of tokens seperated. Format should be 'utf-8'
@@ -23,20 +23,22 @@ def main():
     print("Sentence splitting is finished, length is:", len(sentences))
 
     # Define Word2Vec Model
-    model = Word2Vec(window=5, size=200, min_count=1, workers=cores-1)
+    # sg = 1 -> Uses Skip Gram Implementation
+    # sg = 0 -> Uses CBOW Implementation
+    model = Word2Vec(window=3, size=100, min_count=1, workers=cores-1, sg=1)
 
     # Build Vocab
     t = time()
     model.build_vocab(sentences, progress_per=10000)
-    print('Time to build vocab: {} mins'.format(round((time() - t) / 60, 2)))
+    print('Building vocabulary is finihed in {} mins'.format(round((time() - t) / 60, 2)))
 
     # Train Model
     t = time()
     model.train(sentences, total_examples=model.corpus_count, epochs=30, report_delay=1)
-    print('Time to train the model: {} mins'.format(round((time() - t) / 60, 2)))
+    print('Model training is finished in {} mins'.format(round((time() - t) / 60, 2)))
 
     # Save Trained Model
-    model.save("word2vec_size200_window5_30epoch.model")
+    model.save("models/model.model")
 
 if __name__ == '__main__':
     main()
