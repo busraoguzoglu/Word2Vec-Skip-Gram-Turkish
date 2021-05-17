@@ -1,15 +1,5 @@
 from gensim.models import Word2Vec
-from sklearn.manifold import TSNE
-import matplotlib.pyplot as plt
-import pandas as pd
 import numpy as np
-import math
-
-import seaborn as sns
-sns.set_style("darkgrid")
-
-from sklearn.decomposition import PCA
-from sklearn.manifold import TSNE
 
 # https://www.kaggle.com/pierremegret/gensim-word2vec-tutorial
 
