@@ -1,8 +1,6 @@
 from gensim.models import Word2Vec
 from sklearn.manifold import TSNE
 import matplotlib.pyplot as plt
-import pandas as pd
-import numpy as np
 
 # Ref: https://www.kaggle.com/jeffd23/visualizing-word-vectors-with-t-sne
 

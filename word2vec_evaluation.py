@@ -75,7 +75,7 @@ def main():
     print('Hello this script is for evalution')
 
     # Test:
-    model1 = Word2Vec.load("models/model1.model") # Vector:50 Window:3
+    model1 = Word2Vec.load("models/model.model") # Vector:50 Window:3
     model2 = Word2Vec.load("models/model2.model") # Vector:100 Window:3
     model3 = Word2Vec.load("models/model3.model") # Vector:150 Window:3
     model4 = Word2Vec.load("models/model4.model") # Vector:50 Window:5
