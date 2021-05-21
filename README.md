@@ -10,7 +10,7 @@ Input to Gensim Word2Vec implementation should be an iterable of sentences, each
 
 This is made for analysis purposes, for the midterm exam of CMPE 58T Advanced NLP course on Bogazici University.
 
-Example result 10 similar words to 'sen':
+Example result 10 similar words to 'ben':
 
-similars: [('siz', 0.9491598606109619), ('ben', 0.9353943467140198), ('Sen', 0.9059412479400635), ('seni', 0.8968837857246399), ('seninle', 0.88191819190979), ('efendim,', 0.8742805123329163), ('evet,', 0.8655470013618469), ('sevgili', 0.8652328252792358), ('sanırım', 0.8643956184387207), ('Siz', 0.8619706630706787)]
+[('Ben', 0.8286421298980713), ('sen', 0.8155726790428162), ('siz', 0.8101901412010193), ('kendim', 0.8009457588195801), ('ikimiz', 0.7574027180671692), ('kendime', 0.7567036747932434), ('biz', 0.7440930008888245), ("Jenny'yi", 0.7342860698699951), ('oradaydım', 0.7242607474327087), ('benim', 0.7222325205802917)]
 
